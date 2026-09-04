@@ -62,7 +62,7 @@ int findOldestCar(Car vehicles[], int count)
     return lowestIndex;
 }
 
-void removeCar(Car vehicles[], int count)
+void removeCar(Car vehicles[], int& count) // & allows this value of count to be used in the main() function
 {
     string search;
     bool found = false;
