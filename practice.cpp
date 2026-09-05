@@ -62,13 +62,18 @@ int findOldestCar(Car vehicles[], int count)
     return lowestIndex;
 }
 
-void removeCar(Car vehicles[], int count)
+int removeCar(Car vehicles[], int& count)
 {
+    if (count == 0)
+    {
+        cout << "There are no cars to delete!" << endl;
+        return;
+    }
     string search;
     bool found = false;
     cin.ignore();
-    
-    cout << "Enter make of the vehicle to delete: ";
+
+    cout << "Enter model of the vehicle to delete: ";
     getline(cin, search);
 
     for (int i = 0; i < count; i++)
@@ -89,7 +94,6 @@ void removeCar(Car vehicles[], int count)
     {
         cout << "Vehicle model not found" << endl;
     }
-
 }
 
 void displayCars(Car vehicles[], int count)
