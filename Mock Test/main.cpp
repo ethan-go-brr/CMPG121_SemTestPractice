@@ -167,6 +167,8 @@ void searchByName(Attendee att[], int numOfStudents)
         cout << "No attendees registered" << endl;
         return;
     }
+    bool found = false;
+    string check;
 
     string search;
 
@@ -176,10 +178,85 @@ void searchByName(Attendee att[], int numOfStudents)
     string searchLow;
     searchLow = toLowerCopy(search);
 
+    string nameLow;
+    cout << "Matches: " << endl;
+
     for (int i = 0; i < numOfStudents; i++)
     {
-        
+        nameLow = toLowerCopy(att[i].name);
+        if (nameLow.find(searchLow) != -1)
+        {
+            found = true;
+            if (att[i].checkedIn)
+            {
+                check = "Yes";
+            }
+            else
+            {
+                check = "No";
+            }
+            cout << att[i].studentNo << " | " << att[i].name << " | " <<
+            att[i].ticketType << " | Checked-In: " << check << endl;
+        }
     }
+
+    if (!found)
+    {
+        cout << "No matches found" << endl;
+    }
+
+}
+int removeAttendee(Attendee att[], int& numOfStudents, string studentNo)
+{
+    if (findByStudentNo(att, numOfStudents, studentNo) == -1)
+    {
+        return -1;
+    }
+    else
+    {
+        for (int i = 0; i < numOfStudents; i++)
+        {
+            att[i].name = att[i + 1].name;
+            att[i].checkedIn = att[i + 1].checkedIn;
+            att[i].studentNo = att[i + 1].studentNo;
+            att[i].ticketType = att[i + 1].ticketType;
+
+        }
+        numOfStudents--;
+    }
+}
+void summaryReport(Attendee att[], int numOfStudents)
+{
+    int gen = 0, vip = 0, checked = 0, non_checked = 0;
+    for (int i = 0; i < numOfStudents; i++)
+    {
+        if (att[i].ticketType == 'G')
+        {
+            gen++;
+        }
+        else
+        {
+            vip++;
+        }
+
+        if(att[i].checkedIn)
+        {
+            checked++;
+        }
+        else
+        {
+            non_checked++;
+      
+        }
+    }
+    
+    cout << "SUMMARY" << endl;
+    cout << "Total registered: " << right << setw(20) << numOfStudents << "/20" << endl;
+    cout << "Remaining seats: " << right << setw(20) << 20 - numOfStudents << endl;
+    cout << "General (G): " << right << setw(20) << gen << endl;
+    cout << "VIP (V): " << right << setw(20) << vip << endl;
+    cout << "Checked-in: " << right << setw(20) << checked << endl;
+    cout << "Non-checked-in:  " << right << setw(20) << non_checked << endl;
 
 }
 void showMenu()
