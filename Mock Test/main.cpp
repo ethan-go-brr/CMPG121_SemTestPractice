@@ -67,7 +67,9 @@ int registerAttendee(Attendee att[], int& numOfStudents, string studentNo, strin
     else
     {
         cout << "Registration failed (duplicate ID or full capacity)." << endl;
+        return -1;
     }
+    return numOfStudents;
 }
 
 void listAll(Attendee att[], int numOfStudents)
@@ -122,30 +124,29 @@ bool checkIn (Attendee att[], int numOfStudents, string studentNo)
     {
         return false;
     }
-    else
+
+    for (int i = 0; i < numOfStudents; i++)
     {
-        for (int i = 0; i < numOfStudents; i++)
+        if (att[i].studentNo == studentNo)
         {
-            if (att[i].studentNo == studentNo)
+            if (att[i].checkedIn == false)
             {
-                if (att[i].checkedIn == false)
-                {
-                    att[i].checkedIn = true;
-                    return true;
-                    // need a flag here?
-                }
-                else
-                {
-                    continue; // jumps to the next iteration and checks until it can return true, if it cannot find anything in the array, return false
-                }
+                att[i].checkedIn = true;
+                return true;
+                // need a flag here?
             }
             else
             {
-                return false;
-
+                continue; // jumps to the next iteration and checks until it can return true, if it cannot find anything in the array, return false
             }
-        }  
-    }
+        }
+        else
+        {
+            return false;
+
+        }
+    }  
+
 }
 
 string toLowerCopy(string str)
@@ -162,7 +163,7 @@ void searchByName(Attendee att[], int numOfStudents, string search)
 {
     if (numOfStudents == 0) // chnaged from > to ==
     {
-        cout << "No attendees registered" << endl;
+        cout << "No attendees to search" << endl;
         return;
     }
     bool found = false;
@@ -260,12 +261,12 @@ void summaryReport(Attendee att[], int numOfStudents)
     }
 
     cout << "SUMMARY" << endl;
-    cout << "Total registered: " << right << setw(20) << numOfStudents << "/20" << endl;
-    cout << "Remaining seats: " << right << setw(20) << 20 - numOfStudents << endl;
-    cout << "General (G): " << right << setw(20) << gen << endl;
+    cout << "Total registered: " << right << setw(11) << numOfStudents << "/20" << endl;
+    cout << "Remaining seats: " << right << setw(13) << 20 - numOfStudents << endl;
+    cout << "General (G): " << right << setw(16) << gen << endl;
     cout << "VIP (V): " << right << setw(20) << vip << endl;
-    cout << "Checked-in: " << right << setw(20) << checked << endl;
-    cout << "Non-checked-in:  " << right << setw(20) << non_checked << endl;
+    cout << "Checked-in: " << right << setw(17) << checked << endl;
+    cout << "Non-checked-in:  " << right << setw(12) << non_checked << endl;
 
 }
 void showMenu(Attendee att[], int numOfStudents)
