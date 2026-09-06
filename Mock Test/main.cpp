@@ -36,42 +36,12 @@ int findByStudentNo (Attendee att[], int numOfStudents, string studentNo)
     
 }
 
-int registerAttendee(Attendee att[], int& numOfStudents)
+int registerAttendee(Attendee att[], int& numOfStudents, string studentNo, string name, char ticket)
 {
     if (numOfStudents == 20)
     {
         return -1;
     }
-
-    string studentNo;
-    cout << "Enter student number (exactly 8 digits): ";
-    cin >> studentNo;
-
-    while (studentNo.length() != 8)
-    {
-        cin.clear();
-        cin.ignore(10000, '\n');
-        cout << "Invalid. Student number must be exactly 8 digits. Try again: ";
-        cin >> studentNo;
-    }
-
-    string name;
-    cout << "Enter name: ";
-    cin >> name;
-
-    char ticket;
-    cout << "Ticket type (G/V): ";
-    cin >> ticket;
-
-    while (ticket != 'G' || ticket != 'V')
-    {
-        cin.clear();
-        cin.ignore(10000, '\n');
-        cout << "Invalid ticket type. Enter G or V." << endl;
-        cout << "Ticket type (G/V): ";
-        cin >> ticket;
-    }
-
 
     if(findByStudentNo(att, numOfStudents, studentNo) == -1)
     {
@@ -119,13 +89,8 @@ void listAll(Attendee att[], int numOfStudents)
     }
 }
 
-bool checkIn (Attendee att[], int numOfStudents)
+bool checkIn (Attendee att[], int numOfStudents, string studentNo)
 {
-    string studentNo;
-
-    cout << "Enter student number to check in: ";
-    cin >> studentNo;
-
     if (findByStudentNo(att, numOfStudents, studentNo) == -1)
     {
         return false;
@@ -160,7 +125,7 @@ string toLowerCopy(string str)
     return str;
 }
 
-void searchByName(Attendee att[], int numOfStudents)
+void searchByName(Attendee att[], int numOfStudents, string search)
 {
     if (numOfStudents > 0)
     {
@@ -169,11 +134,6 @@ void searchByName(Attendee att[], int numOfStudents)
     }
     bool found = false;
     string check;
-
-    string search;
-
-    cout << "Enter part of name to search: ";
-    cin >> search;
 
     string searchLow;
     searchLow = toLowerCopy(search);
@@ -249,7 +209,7 @@ void summaryReport(Attendee att[], int numOfStudents)
       
         }
     }
-    
+
     cout << "SUMMARY" << endl;
     cout << "Total registered: " << right << setw(20) << numOfStudents << "/20" << endl;
     cout << "Remaining seats: " << right << setw(20) << 20 - numOfStudents << endl;
@@ -259,7 +219,7 @@ void summaryReport(Attendee att[], int numOfStudents)
     cout << "Non-checked-in:  " << right << setw(20) << non_checked << endl;
 
 }
-void showMenu()
+void showMenu(Attendee att[], int numOfStudents)
 {
     int choice;
 
@@ -287,26 +247,94 @@ void showMenu()
         {
             case 1:
             {
+                string studentNo;
+                cout << "Enter student number (exactly 8 digits): ";
+                cin >> studentNo;
+
+                while (studentNo.length() != 8)
+                {
+                    cin.clear();
+                    cin.ignore(10000, '\n');
+                    cout << "Invalid. Student number must be exactly 8 digits. Try again: ";
+                    cin >> studentNo;
+                }
+
+                string name;
+                cout << "Enter name: ";
+                cin >> name;
+
+                char ticket;
+                cout << "Ticket type (G/V): ";
+                cin >> ticket;
+
+                while (ticket != 'G' || ticket != 'V')
+                {
+                    cin.clear();
+                    cin.ignore(10000, '\n');
+                    cout << "Invalid ticket type. Enter G or V." << endl;
+                    cout << "Ticket type (G/V): ";
+                    cin >> ticket;
+                }
+
+                registerAttendee(att, numOfStudents, studentNo, name, ticket);
                 break;
             }
             case 2:
             {
+                listAll(att, numOfStudents);
                 break;
             }
             case 3:
             {
-                break;
+                string studentNo;
+                cout << "Enter student number to check in: ";
+                cin >> studentNo;
+
+                if(checkIn(att, numOfStudents, studentNo)) 
+                {
+                        cout << "Check-in successful" << endl;
+                }
+                else
+                {
+                        cout << "Check-in failed" << endl;
+                }
+                    break;
             }
             case 4:
             {
+                string search;
+                cout << "Enter part of name to search: ";
+                cin >> search;
+                searchByName(att, numOfStudents, search);
                 break;
             }
             case 5:
             {
+                string studentNo;
+                cout << "Enter student number (exactly 8 digits): ";
+                cin >> studentNo;
+
+                while (studentNo.length() != 8)
+                {
+                    cin.clear();
+                    cin.ignore(10000, '\n');
+                    cout << "Invalid. Student number must be exactly 8 digits. Try again: ";
+                    cin >> studentNo;
+                }
+
+                if (removeAttendee(att, numOfStudents, studentNo) == -1)
+                {
+                    cout << "Attendee not found" << endl;
+                }
+                else
+                {
+                    cout << "Removed successfully" << endl;
+                }
                 break;
             }
             case 6:
             {
+                summaryReport(att, numOfStudents);
                 break;
             }
             default:
@@ -322,6 +350,5 @@ int main()
 {
     Attendee att[20];
     int numOfAttendees = 0;
-    showMenu();
-
+    showMenu(att, numOfAttendees);
 }
