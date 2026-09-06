@@ -406,15 +406,14 @@ int main()
 
 /*
 Bugs that I have so far:
-Check in function does not update att.checkedIn
 Literally most of the formatting
-Counter for the students is a bit weird, this may be why checkIn doesn't work
-search doesn't work, may also be due to the counter
+make sure to check whether there are students in the array first
 
 What works:
 Information in the summary
 Listing the attendees
+search and checkIN
 yeah :)
 
-make sure to check whether there are students in the array first
+
 */
