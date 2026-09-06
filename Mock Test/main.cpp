@@ -14,7 +14,7 @@ struct Attendee
 
 int findByStudentNo (Attendee att[], int numOfStudents, string studentNo)
 {
-    int index = 0;\
+    int index = 0;
     bool found = false;
     for (int i = 0; i < numOfStudents; i++)
     {
@@ -38,6 +38,7 @@ int findByStudentNo (Attendee att[], int numOfStudents, string studentNo)
 
 int registerAttendee(Attendee att[], int& numOfStudents, string studentNo, string name, char ticket)
 {
+    string tickets;
     if (numOfStudents == 20)
     {
         return -1;
@@ -49,8 +50,17 @@ int registerAttendee(Attendee att[], int& numOfStudents, string studentNo, strin
         att[numOfStudents].studentNo = studentNo;
         att[numOfStudents].ticketType = ticket;
         att[numOfStudents].checkedIn = false;
+
+        if (ticket == 'G')
+        {
+            tickets = "General";
+        }
+        else
+        {
+            tickets = "VIP";
+        }
         cout << "Registered successfully for " << att[numOfStudents].name << 
-        " ("<< att[numOfStudents].ticketType << ")" << endl; // added endl;
+        " ("<< tickets << ")" << endl; // added endl;
         numOfStudents++;
         
     }
@@ -62,19 +72,24 @@ int registerAttendee(Attendee att[], int& numOfStudents, string studentNo, strin
 
 void listAll(Attendee att[], int numOfStudents)
 {
-    if (numOfStudents < 0)
+    if (numOfStudents == 0)
     {
         cout << "No attendees registered" << endl;
         return;
     }
 
-    cout << "#" << left << setw(3) << "StudentNo" << setw(9) << setw(3) << "Name" << setw(15) << "Type" 
-    << setw(5) << "CheckedIn" << setw(7) << endl;
-    string checked;
+    cout << left 
+    << setw(3) << "#"
+    << setw(12) << "StudentNo" 
+    << setw(12) << "Name"
+    << setw(8) << "Type"
+    << setw(10) << "CheckedIn" << endl;
+
+    string checked, ticket;
 
     for (int i = 0; i < numOfStudents; i++)
     {
-        if (att[numOfStudents].checkedIn == false)
+        if (att[i].checkedIn == false) // changed [numOfStudents] to [i]
         {
             checked = "No";
         }
@@ -82,10 +97,22 @@ void listAll(Attendee att[], int numOfStudents)
         {
             checked = "Yes";
         }
+        if (att[i].ticketType == 'G')
+        {
+            ticket = "General";
+        }
+        else
+        {
+            ticket = "VIP";
+        }
 
-        cout << i + 1 << left << setw(3) << att[i].studentNo << setw(9) << setw(3) << att[i].name 
-        << setw(15) << att[i].ticketType 
-        << setw(5) << checked << setw(7) << endl;
+
+        cout << left 
+        << setw(3) << i + 1
+        << setw(12) << att[i].studentNo
+        << setw(12) << att[i].name
+        << setw(8) << ticket
+        << setw(10) << checked << endl;
     }
 }
 
@@ -105,11 +132,11 @@ bool checkIn (Attendee att[], int numOfStudents, string studentNo)
                 {
                     att[i].checkedIn = true;
                     return true;
-                    
+                    // need a flag here?
                 }
                 else
                 {
-                    return false;
+                    continue; // jumps to the next iteration and checks until it can return true, if it cannot find anything in the array, return false
                 }
             }
             else
@@ -133,13 +160,13 @@ string toLowerCopy(string str)
 
 void searchByName(Attendee att[], int numOfStudents, string search)
 {
-    if (numOfStudents > 0)
+    if (numOfStudents == 0) // chnaged from > to ==
     {
         cout << "No attendees registered" << endl;
         return;
     }
     bool found = false;
-    string check;
+    string check, ticket;
 
     string searchLow;
     searchLow = toLowerCopy(search);
@@ -161,8 +188,17 @@ void searchByName(Attendee att[], int numOfStudents, string search)
             {
                 check = "No";
             }
+            if (att[i].ticketType == 'G')
+            {
+                ticket = "General";
+            }
+            else
+            {
+                ticket = "VIP";
+            }
+
             cout << att[i].studentNo << " | " << att[i].name << " | " <<
-            att[i].ticketType << " | Checked-In: " << check << endl;
+            ticket << " | Checked-In: " << check << endl;
         }
     }
 
@@ -174,22 +210,29 @@ void searchByName(Attendee att[], int numOfStudents, string search)
 }
 int removeAttendee(Attendee att[], int& numOfStudents, string studentNo)
 {
+    int delIndex = 0;
+
     if (findByStudentNo(att, numOfStudents, studentNo) == -1)
     {
         return -1;
     }
     else
     {
-        for (int i = 0; i < numOfStudents; i++)
-        {
-            att[i].name = att[i + 1].name;
-            att[i].checkedIn = att[i + 1].checkedIn;
-            att[i].studentNo = att[i + 1].studentNo;
-            att[i].ticketType = att[i + 1].ticketType;
-
-        }
-        numOfStudents--;
+        delIndex = findByStudentNo(att, numOfStudents, studentNo);  // get the index where the student was found
     }
+    
+    
+    for (int i = delIndex; i < numOfStudents; i++)
+    {
+        att[i].name = att[i + 1].name;
+        att[i].checkedIn = att[i + 1].checkedIn;
+        att[i].studentNo = att[i + 1].studentNo;
+        att[i].ticketType = att[i + 1].ticketType;
+
+    } // shift from the delete index
+    
+    return numOfStudents--;
+    
 }
 void summaryReport(Attendee att[], int numOfStudents)
 {
@@ -372,4 +415,6 @@ What works:
 Information in the summary
 Listing the attendees
 yeah :)
+
+make sure to check whether there are students in the array first
 */
