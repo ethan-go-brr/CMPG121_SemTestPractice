@@ -50,7 +50,7 @@ int registerAttendee(Attendee att[], int& numOfStudents, string studentNo, strin
         att[numOfStudents].ticketType = ticket;
         att[numOfStudents].checkedIn = false;
         cout << "Registered successfully for " << att[numOfStudents].name << 
-        " ("<< att[numOfStudents].ticketType << ")";
+        " ("<< att[numOfStudents].ticketType << ")" << endl; // added endl;
         numOfStudents++;
         
     }
@@ -101,15 +101,21 @@ bool checkIn (Attendee att[], int numOfStudents, string studentNo)
         {
             if (att[i].studentNo == studentNo)
             {
-                if (att[i].checkedIn == true)
+                if (att[i].checkedIn == false)
+                {
+                    att[i].checkedIn = true;
+                    return true;
+                    
+                }
+                else
                 {
                     return false;
                 }
             }
             else
             {
-                att[i].checkedIn = true;
-                return true;
+                return false;
+
             }
         }  
     }
@@ -262,12 +268,12 @@ void showMenu(Attendee att[], int numOfStudents)
                 string name;
                 cout << "Enter name: ";
                 cin >> name;
-
+                
                 char ticket;
                 cout << "Ticket type (G/V): ";
                 cin >> ticket;
 
-                while (ticket != 'G' || ticket != 'V')
+                while (ticket != 'G' && ticket != 'V') // changed from || to &&
                 {
                     cin.clear();
                     cin.ignore(10000, '\n');
@@ -348,7 +354,22 @@ void showMenu(Attendee att[], int numOfStudents)
 
 int main()
 {
-    Attendee att[20];
+    const int MAX_ATTENDEES = 20;
+    Attendee att[MAX_ATTENDEES];
     int numOfAttendees = 0;
     showMenu(att, numOfAttendees);
 }
+
+
+/*
+Bugs that I have so far:
+Check in function does not update att.checkedIn
+Literally most of the formatting
+Counter for the students is a bit weird, this may be why checkIn doesn't work
+search doesn't work, may also be due to the counter
+
+What works:
+Information in the summary
+Listing the attendees
+yeah :)
+*/
